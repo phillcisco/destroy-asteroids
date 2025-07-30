@@ -1,0 +1,4 @@
+Nave: https://kenney.nl/assets/space-shooter-redux
+Background: https://norma-2d.itch.io/space-backgrounds-pack
+Projectile: https://opengameart.org/content/pure-projectile-magic-effect
+Asteroides: https://opengameart.org/content/12-pixel-art-asteroids
