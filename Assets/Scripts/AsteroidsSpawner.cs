@@ -1,14 +1,21 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 
 public class AsteroidsSpawner : MonoBehaviour
 {
 
-    [SerializeField] List<Transform> spawnPoints;
+    List<Transform> spawnPoints;
 
-    float _numSpawnPoints;
+    [SerializeField] List<GameObject> asteroids;
 
+    int _numSpawnPoints;
+    int _numAsteroidsVariations;
+
+    float _elapsedTime;
+    
     void Awake()
     {
         spawnPoints = new List<Transform>();
@@ -19,10 +26,21 @@ public class AsteroidsSpawner : MonoBehaviour
         _numSpawnPoints = spawnPoints.Count;
     }
 
+    void Start()
+    {
+        _numAsteroidsVariations = asteroids.Count;
+        InvokeRepeating("SpawnAsteroid",0,1);
+    }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        _elapsedTime += Time.deltaTime;
+    }
+
+    void SpawnAsteroid()
+    {
+        int spawnPos = Random.Range(0, _numSpawnPoints);
+        int chosenAsteroid = Random.Range(0, _numAsteroidsVariations);
+        Instantiate(asteroids[chosenAsteroid], spawnPoints[spawnPos].position, Quaternion.identity);
     }
 }

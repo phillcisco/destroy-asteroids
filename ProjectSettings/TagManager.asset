@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Asteroid
+  - Shredder
   layers:
   - Default
   - TransparentFX
@@ -52,6 +54,9 @@ TagManager:
     locked: 0
   - name: SpaceShip-Player
     uniqueID: 1469554615
+    locked: 0
+  - name: VFX
+    uniqueID: 2703852305
     locked: 0
   m_RenderingLayers:
   - Default

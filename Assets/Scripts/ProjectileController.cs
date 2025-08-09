@@ -9,7 +9,7 @@ public class ProjectileController : MonoBehaviour
 
     [SerializeField] float speed;
     [SerializeField] float intensityRate;
-    
+    [SerializeField] GameObject projectileHitVFX;
     Material _mat;
     Rigidbody2D _rb;
     float _intensity = 1;
@@ -41,5 +41,16 @@ public class ProjectileController : MonoBehaviour
     public void DestroyProjectile()
     {
         Destroy(gameObject);
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.CompareTag("Shredder"))
+            Destroy(gameObject);
+        else if (other.transform.parent.CompareTag("Asteroid"))
+        {
+            Instantiate(projectileHitVFX, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
     }
 }

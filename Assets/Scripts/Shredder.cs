@@ -5,6 +5,10 @@ public class Shredder : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D other)
     {
-        other.GetComponentInParent<ProjectileController>().DestroyProjectile();
+
+        if(other.transform.parent.CompareTag("Asteroid"))
+            other.GetComponentInParent<AsteroidsController>().Destroy();
+        else
+            other.GetComponentInParent<ProjectileController>().DestroyProjectile();
     }
 }
