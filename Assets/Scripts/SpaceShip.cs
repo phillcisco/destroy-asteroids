@@ -8,16 +8,14 @@ public class SpaceShip : MonoBehaviour
    
     
     [SerializeField] float speed;
-    [SerializeField] float _fireRate = 0.5f;
-    [SerializeField] GameObject projectilePrefab;
-    [SerializeField] GameObject bulletLaunchPos;
     
     Camera _mainCamera;
     Rigidbody2D _rb;
     float _yDir;
     float _xPosition;
     float _minY, _maxY;
-    float _lastFire;
+    
+    [SerializeField] Arma arma;
 
     bool _isShooting;
 
@@ -34,7 +32,9 @@ public class SpaceShip : MonoBehaviour
         _maxY = Camera.main.ViewportToWorldPoint(new Vector2(0,0.85f)).y;
    
         InputMovementDevice = (InputDeviceEnum) PlayerPrefs.GetInt(Constants.INPUT_DEVICE,Constants.MOUSE);
-        _lastFire = Time.time + _fireRate;
+        
+        //Iniciando com Arma Padrão
+        arma = Instantiate(arma,transform);
     }
     
     void Start()
@@ -82,9 +82,9 @@ public class SpaceShip : MonoBehaviour
 
     void Update()
     {
-        if (_isShooting && Time.time - _lastFire > _fireRate)
+        if (_isShooting)
         {
-            ShootBullet();
+            Atirar();
         }
     }
 
@@ -108,12 +108,23 @@ public class SpaceShip : MonoBehaviour
         _yDir = 0;
     }
 
-    void ShootBullet()
+    // void ShootBullet()
+    // {
+    //     Instantiate(projectilePrefab, bulletLaunchPos.transform.position, Quaternion.identity);
+    //     _lastFire = Time.time;
+    // }
+
+
+    public void Atirar()
     {
-        Instantiate(projectilePrefab, bulletLaunchPos.transform.position, Quaternion.identity);
-        _lastFire = Time.time;
+        arma.Atirar();
     }
-    
+
+    public void SetArma(Arma arma)
+    {
+        Destroy(this.arma.gameObject);
+        this.arma = Instantiate(arma,transform);
+    }
 }
 
 [Serializable]

@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Asteroid
   - Shredder
+  - Central
+  - RightPoint
+  - LeftPoint
   layers:
   - Default
   - TransparentFX
@@ -15,7 +18,7 @@ TagManager:
   - UI
   - Shredder
   - Projectile
-  - 
+  - Asteroid
   - 
   - 
   - 
