@@ -9,6 +9,7 @@ TagManager:
   - Central
   - RightPoint
   - LeftPoint
+  - Projectile
   layers:
   - Default
   - TransparentFX

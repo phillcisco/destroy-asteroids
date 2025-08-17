@@ -1,17 +1,16 @@
-using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Utils;
 
 public class ProjectileController : MonoBehaviour
 {
 
+    [SerializeField] Transform projectileSpawnPos;
     [SerializeField] float speed;
     [SerializeField] float intensityRate;
-    [SerializeField] GameObject projectileHitVFX;
+    [field: SerializeField] public ProjectileType ProjectileTypeID { get; set; }
     Material _mat;
     Rigidbody2D _rb;
+    
     float _intensity = 1;
     int _intensityDir;
     void Awake()
@@ -20,11 +19,11 @@ public class ProjectileController : MonoBehaviour
         _mat = GetComponentInChildren<SpriteRenderer>().material;
     }
 
-    void Start()
+    void OnEnable()
     {
         _rb.AddForceX(speed, ForceMode2D.Impulse);
     }
-
+   
     void Update()
     {
         BlinkProjectileVFX();
@@ -45,12 +44,15 @@ public class ProjectileController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.CompareTag("Shredder"))
-            Destroy(gameObject);
-        else if (other.transform.parent.CompareTag("Asteroid"))
+        if (other.CompareTag("Asteroid"))
         {
-            Instantiate(projectileHitVFX, transform.position, Quaternion.identity);
-            Destroy(gameObject);
+            ProjectileVFXPool.Instance.PlayVFX(projectileSpawnPos);
         }
+        ProjectilesPool.Instance.ReturnToPool(ProjectileTypeID, gameObject);
     }
+}
+
+public enum ProjectileType
+{
+    Standard, Heavy
 }

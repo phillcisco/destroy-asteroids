@@ -45,5 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireRate: 0.5
+  PoolSize: 20
   projectilePrefab: {fileID: 7820267524170161085, guid: f66a64c5edba56d459650764404b63f0, type: 3}
-  projectileLaunchPos: {fileID: 0}

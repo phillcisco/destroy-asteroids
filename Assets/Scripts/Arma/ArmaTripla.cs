@@ -3,28 +3,37 @@ using UnityEngine;
 public class ArmaTripla : Arma
 {
     [SerializeField] GameObject projectilePrefab;
-    Transform projectileLaunchPos,projectileLaunchPosLeft,projectileLaunchPosRight;
+    int numOfProjectiles = 3;
+
+    Transform[] projectileLaunchPos;
+    //Transform projectileLaunchPos,projectileLaunchPosLeft,projectileLaunchPosRight;
     
     void Awake()
     {
-        lastFire = Time.time + fireRate;
+        LastFire = Time.time + fireRate;
     }
 
     void Start()
     {
-        projectileLaunchPos = GameObject.FindWithTag("Central").transform;
-        projectileLaunchPosLeft = GameObject.FindWithTag("LeftPoint").transform;
-        projectileLaunchPosRight = GameObject.FindWithTag("RightPoint").transform;
+        projectileLaunchPos = new Transform[numOfProjectiles];
+        projectileLaunchPos[0] = GameObject.FindWithTag("Central").transform;
+        projectileLaunchPos[1] = GameObject.FindWithTag("LeftPoint").transform;
+        projectileLaunchPos[2] = GameObject.FindWithTag("RightPoint").transform;
+        _projectileType = projectilePrefab.GetComponent<ProjectileController>().ProjectileTypeID;
     }
 
     public override void Atirar()
     {
-        if (Time.time - lastFire > fireRate)
+        if (Time.time - LastFire > fireRate)
         {
-            Instantiate(projectilePrefab, projectileLaunchPosLeft.position, Quaternion.identity);
-            Instantiate(projectilePrefab, projectileLaunchPos.position, Quaternion.identity);
-            Instantiate(projectilePrefab, projectileLaunchPosRight.position, Quaternion.identity);
-            lastFire = Time.time;
+            for (int i = 0; i < numOfProjectiles; i++)
+            {
+                GameObject projectile = ProjectilesPool.Instance.RetrieveFromPool(_projectileType);
+                projectile.transform.position = projectileLaunchPos[i].position;
+                projectile.SetActive(true);
+            }
+
+            LastFire = Time.time;
         }
         
     }

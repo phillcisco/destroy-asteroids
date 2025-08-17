@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 
@@ -8,14 +9,12 @@ public class AsteroidsSpawner : MonoBehaviour
 {
 
     List<Transform> spawnPoints;
-
-    [SerializeField] List<GameObject> asteroids;
-
-    int _numSpawnPoints;
+    Queue<GameObject> asteroidsPool;
+    [SerializeField] List<GameObject> asteroidsPrefabs;
+    [SerializeField] int _numSpawnPoints;
+    [SerializeField] Transform asteroidsContainer;
     int _numAsteroidsVariations;
 
-    float _elapsedTime;
-    
     void Awake()
     {
         spawnPoints = new List<Transform>();
@@ -24,23 +23,42 @@ public class AsteroidsSpawner : MonoBehaviour
             spawnPoints.Add(spawnPoint);
         }
         _numSpawnPoints = spawnPoints.Count;
+        _numAsteroidsVariations = asteroidsPrefabs.Count;
     }
 
     void Start()
     {
-        _numAsteroidsVariations = asteroids.Count;
-        InvokeRepeating("SpawnAsteroid",0,1);
+        SpawnAsteroids(30);
+        InvokeRepeating("RetrieveFromPool",0,1);
     }
 
-    void Update()
+    void SpawnAsteroids(int numToBeSpawned)
     {
-        _elapsedTime += Time.deltaTime;
+        asteroidsPool = new Queue<GameObject>(numToBeSpawned);
+        for (int i = 0; i < numToBeSpawned; i++)
+        {
+            int spawnPos = Random.Range(0, _numSpawnPoints);
+            int chosenAsteroid = Random.Range(0, _numAsteroidsVariations);
+            GameObject newAsteroid = Instantiate(asteroidsPrefabs[chosenAsteroid], spawnPoints[spawnPos].position, Quaternion.identity, asteroidsContainer);
+            AsteroidController newAst = newAsteroid.GetComponent<AsteroidController>();
+            newAst.OnAsteroidHit += AddToPool;
+            newAsteroid.SetActive(false);
+            asteroidsPool.Enqueue(newAsteroid);
+        }
     }
 
-    void SpawnAsteroid()
+    void AddToPool(GameObject gameObject)
     {
+        gameObject.SetActive(false);
         int spawnPos = Random.Range(0, _numSpawnPoints);
-        int chosenAsteroid = Random.Range(0, _numAsteroidsVariations);
-        Instantiate(asteroids[chosenAsteroid], spawnPoints[spawnPos].position, Quaternion.identity);
+        gameObject.transform.position = spawnPoints[spawnPos].position;
+        asteroidsPool.Enqueue(gameObject);
     }
+
+    void RetrieveFromPool()
+    {
+        GameObject newAsteroid = asteroidsPool.Dequeue();
+        newAsteroid.SetActive(true);
+    }
+    
 }

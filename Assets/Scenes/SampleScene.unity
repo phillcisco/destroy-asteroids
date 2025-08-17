@@ -482,6 +482,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &554603681
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 554603683}
+  - component: {fileID: 554603682}
+  m_Layer: 0
+  m_Name: VFXPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &554603682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554603681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae8cc881cc597eb4d885db626cd55a99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilesVFX:
+  - {fileID: 4052933034672922791, guid: 7dad8ae2af418d543b93386d1b07355a, type: 3}
+--- !u!4 &554603683
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554603681}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &555404303
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,7 +614,7 @@ GameObject:
   - component: {fileID: 575481935}
   - component: {fileID: 575481934}
   m_Layer: 0
-  m_Name: AsteroidsSpawnPoints
+  m_Name: AsteroidsSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -586,11 +632,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb14f87cb1c9914409589c53d97d24f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  asteroids:
+  asteroidsPrefabs:
   - {fileID: 4209255537625992201, guid: 9d6f3dbe3670efe4d886e4b1345ceab1, type: 3}
   - {fileID: 6215868246294228301, guid: 7907d89a345a42d4e88fcf980cd9f0df, type: 3}
   - {fileID: 6215868246294228301, guid: 4f3f95fbbdaa3b04ea8ac51f66482ffb, type: 3}
   - {fileID: 6215868246294228301, guid: 2993fcff58b332143bd4a144c0834770, type: 3}
+  _numSpawnPoints: 20
+  asteroidsContainer: {fileID: 1230836615}
 --- !u!4 &575481935
 Transform:
   m_ObjectHideFlags: 0
@@ -1003,6 +1051,80 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &688393285
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 688393287}
+  - component: {fileID: 688393286}
+  - component: {fileID: 688393288}
+  m_Layer: 6
+  m_Name: Shredder
+  m_TagString: Shredder
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &688393286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688393285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e6778a6199989246ae29f3ee90b1e37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &688393287
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688393285}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1091100280}
+  - {fileID: 2006320847}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &688393288
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688393285}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &701958015
 GameObject:
   m_ObjectHideFlags: 0
@@ -1272,26 +1394,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1091100280}
   - component: {fileID: 1091100279}
-  - component: {fileID: 1091100278}
-  m_Layer: 0
-  m_Name: AsteroidShredder
-  m_TagString: Untagged
+  m_Layer: 6
+  m_Name: LeftShredder
+  m_TagString: Shredder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1091100278
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1091100277}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e6778a6199989246ae29f3ee90b1e37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &1091100279
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1346,12 +1455,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1091100277}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -11.8, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 688393287}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1091231209
 GameObject:
@@ -1553,6 +1662,84 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1155692550}
   m_CullTransparentMesh: 1
+--- !u!1 &1160728518
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1160728520}
+  - component: {fileID: 1160728519}
+  m_Layer: 0
+  m_Name: ProjectilesPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1160728519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160728518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d00a6d343793f44eaca929e0f467a94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilesType:
+  - {fileID: 2528733872512477293, guid: f66a64c5edba56d459650764404b63f0, type: 3}
+  - {fileID: 2528733872512477293, guid: 1b0a592d212d31744b4f090e1a223ede, type: 3}
+--- !u!4 &1160728520
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160728518}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1230836614
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1230836615}
+  m_Layer: 0
+  m_Name: AsteroidsContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1230836615
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230836614}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1285160463
 GameObject:
   m_ObjectHideFlags: 0
@@ -3031,9 +3218,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2006320847}
   - component: {fileID: 2006320846}
-  - component: {fileID: 2006320848}
   m_Layer: 6
-  m_Name: Shredder
+  m_Name: RightShredder
   m_TagString: Shredder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3093,25 +3279,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2006320845}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 12.21, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 688393287}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2006320848
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2006320845}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e6778a6199989246ae29f3ee90b1e37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2146722038
 GameObject:
   m_ObjectHideFlags: 0
@@ -3253,6 +3427,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3870529272857025872, guid: 53866221792fae64b982514ba2674996, type: 3}
+      propertyPath: arma
+      value: 
+      objectReference: {fileID: 5799236327639137754, guid: 47578c9191e32cf4eb5c9e9c874533ca, type: 3}
     - target: {fileID: 4637520974723977426, guid: 53866221792fae64b982514ba2674996, type: 3}
       propertyPath: m_Name
       value: SpaceShip
@@ -3314,7 +3492,9 @@ SceneRoots:
   - {fileID: 1646789095}
   - {fileID: 1315718510}
   - {fileID: 1869792325}
-  - {fileID: 2006320847}
-  - {fileID: 1091100280}
   - {fileID: 575481935}
   - {fileID: 1461777761}
+  - {fileID: 688393287}
+  - {fileID: 1230836615}
+  - {fileID: 1160728520}
+  - {fileID: 554603683}

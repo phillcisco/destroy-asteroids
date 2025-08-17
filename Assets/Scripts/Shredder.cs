@@ -1,14 +1,30 @@
+
 using System;
 using UnityEngine;
 
+
 public class Shredder : MonoBehaviour
 {
-    void OnTriggerEnter2D(Collider2D other)
+
+    public static Shredder Instance;
+    
+    void Awake()
     {
-        print("Collider do shredder: " + other.gameObject);
-        if(other.transform.parent.CompareTag("Asteroid"))
-            other.GetComponentInParent<AsteroidsController>().Destroy();
+        if (Instance == null)
+            Instance = this;
         else
-            other.GetComponentInParent<ProjectileController>().DestroyProjectile();
+            Destroy(gameObject);
+        DontDestroyOnLoad(gameObject);
     }
+
+    public event Action<GameObject> OnAsteroidHitShredder;
+    // void OnTriggerEnter2D(Collider2D other)
+    // {
+    //     if (other.CompareTag("Projectile"))
+    //     {
+    //         //OnAsteroidHitShredder?.Invoke(other.transform.parent.gameObject);
+    //         ProjectilesPool.Instance.ReturnToPool(,ot);
+    //     }
+    //
+    // }
 }
