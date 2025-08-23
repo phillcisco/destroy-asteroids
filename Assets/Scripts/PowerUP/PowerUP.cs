@@ -24,7 +24,7 @@ public class PowerUP : MonoBehaviour
     {
         if (other.CompareTag(Constants.TAG_PLAYER))
         {
-            other.GetComponentInParent<SpaceShip>().SetArma(arma);
+            other.GetComponentInParent<Nave>().SetArma(arma);
         }
     }
 }
