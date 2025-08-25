@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -14,9 +16,41 @@ public class SwitchNaveSprite : MonoBehaviour
     [SerializeField] Image rightSprite;
     [SerializeField] EventSystem eventSystem;
 
+    [Header("Animation Transforms")] 
+    [SerializeField] Image centerSpriteAnim;
+    [SerializeField] Image leftSpriteAnim;
+    [SerializeField] Image rightSpriteAnim;
+
+    [SerializeField] RectTransform firstPosRect;
+    
+    Vector2 centerSpritePos, leftSpritePos, rightSpritePos;
+    Vector2 centerSpriteSize, sideSpriteSize;
+
+    [Header("Sprites")] 
+    [SerializeField] List<Image> naveSpritesContainer;
+    
+    [Header("Sprites")] 
+    [SerializeField] List<RectTransform> spritesPosition;
+    
+    Animator _animatorController;
+    bool _isMoving;
     bool isUserSelectingShip;
     int index;
     int totalNumSprites;
+    //Center sprite
+    int selectedSpriteIndex = 2;
+
+    void Awake()
+    {
+        centerSpritePos = chosenSprite.rectTransform.anchoredPosition;
+        centerSpriteSize = chosenSprite.rectTransform.sizeDelta;
+        leftSpritePos = leftSprite.rectTransform.anchoredPosition;
+        rightSpritePos = rightSprite.rectTransform.anchoredPosition;
+        sideSpriteSize = leftSprite.rectTransform.sizeDelta;
+        
+        _animatorController = GetComponent<Animator>();
+    }
+
     void OnEnable()
     {
         isUserSelectingShip = true;
@@ -28,25 +62,119 @@ public class SwitchNaveSprite : MonoBehaviour
         isUserSelectingShip = false;
     }
 
-    public void SwitchShipSprite()
+    void OnSwitch(InputValue inputValue)
     {
+        print("aa");
+        if (_isMoving) return;
         if (isUserSelectingShip)
         {
-
-            if (Keyboard.current.aKey.isPressed)
+            _isMoving = true;
+            for (int i = 0; i < naveSpritesContainer.Count; i++)
             {
-                index--;
-                chosenSprite.sprite = naveSprites[Mathf.Abs(index % totalNumSprites)];
-                leftSprite.sprite = naveSprites[Mathf.Abs((index - 1) % totalNumSprites)];
-                rightSprite.sprite = naveSprites[Mathf.Abs((index + 1) % totalNumSprites)];
+                print(i);
+                print(naveSpritesContainer.Count);
+                Vector2 finalPos;
+                if(i+1 == naveSpritesContainer.Count)
+                    finalPos = firstPosRect.anchoredPosition;
+                else
+                    finalPos = naveSpritesContainer[i + 1 + i].rectTransform.anchoredPosition;
+                Vector2 finalSize = finalPos.x == 0 ? centerSpriteSize : sideSpriteSize;
+                naveSpritesContainer[i].GetComponent<MoveShipSprite>().Move(finalPos,finalSize,1);
             }
-            
+
+            _isMoving = false;
+            //StartCoroutine(IEMoveSpriteUI(naveSpritesContainer[2].rectTransform, rightSpritePos, sideSpriteSize, 1));
+            // chosenSprite.gameObject.SetActive(false);
+            // _animatorController.Play("NaveSwitchLeft");
+            // float dir = inputValue.Get<Vector2>().x;
+            // index -= (int)dir;
+            //
+            // chosenSprite.sprite = naveSprites[Mod(index,totalNumSprites)];
+            // leftSprite.sprite = naveSprites[Mod(index - 1,totalNumSprites)];
+            // rightSprite.sprite = naveSprites[Mod(index + 1,totalNumSprites)];
         }
+    }
+
+    public void AnimationEnded()
+    {
+        // //Correct positions and sizes
+        // chosenSprite.rectTransform.anchoredPosition = centerSpritePos;
+        // chosenSprite.rectTransform.sizeDelta = centerSpriteSize;
+        // centerSpriteAnim.rectTransform.anchoredPosition = centerSpritePos;
+        // centerSpriteAnim.rectTransform.sizeDelta = centerSpriteSize;
+        // centerSpriteAnim.sprite = chosenSprite.sprite;
+        //
+        // leftSprite.rectTransform.anchoredPosition = leftSpritePos;
+        // leftSpriteAnim.rectTransform.anchoredPosition = leftSpritePos;
+        //
+        // leftSprite.rectTransform.sizeDelta = sideSpriteSize;
+        // leftSpriteAnim.rectTransform.sizeDelta = sideSpriteSize;
+        //
+        // rightSprite.rectTransform.anchoredPosition = rightSpritePos;
+        // rightSpriteAnim.rectTransform.anchoredPosition = rightSpritePos;
+        //
+        // rightSprite.rectTransform.sizeDelta = sideSpriteSize;
+        // rightSpriteAnim.rectTransform.sizeDelta = sideSpriteSize;
+        //
+        //
+        //
+        // //Copy sprites
+        // rightSpriteAnim.sprite = rightSprite.sprite;
+        // leftSpriteAnim.sprite = leftSprite.sprite;
+        //
+        //
+        // print("Animacao acabou");
+        // chosenSprite.gameObject.SetActive(true);
+        
+    }
+    
+    int Mod(int a, int b)
+    {
+        return ((a % b) + b) % b;
+    }
+    
+    // public void SwitchShipSprite()
+    // {
+    //     if (isUserSelectingShip)
+    //     {
+    //
+    //         if (Keyboard.current.aKey.isPressed)
+    //         {
+    //             index--;
+    //             chosenSprite.sprite = naveSprites[Mathf.Abs(index % totalNumSprites)];
+    //             leftSprite.sprite = naveSprites[Mathf.Abs((index - 1) % totalNumSprites)];
+    //             rightSprite.sprite = naveSprites[Mathf.Abs((index + 1) % totalNumSprites)];
+    //         }
+    //         
+    //     }
+    // }
+
+    IEnumerator IEMoveSpriteUI(RectTransform target, Vector2 finalPos, Vector2 finalSize, int direction)
+    {
+        
+        float deslocamento = 0;
+        float totalduration = 1f;
+       
+        Vector2 initialPos = target.anchoredPosition;
+        Vector2 initialSize = target.sizeDelta;
+        while (Mathf.Abs(finalPos.x - target.anchoredPosition.x)  > 0.1f)
+        { 
+            
+            target.anchoredPosition = Vector3.Lerp(initialPos,finalPos,deslocamento/totalduration);
+            target.sizeDelta = Vector3.Lerp(initialSize, finalSize, deslocamento/totalduration);
+            deslocamento += Time.deltaTime;
+            print("a");
+            yield return null;
+        }
+
+        target.anchoredPosition = finalPos;
+        target.sizeDelta = finalSize;
+
     }
 
     void Update()
     {
-        SwitchShipSprite();
+        //SwitchShipSprite();
     }
 
     void Reset()

@@ -10,6 +10,9 @@ TagManager:
   - RightPoint
   - LeftPoint
   - Projectile
+  - CenterSprite
+  - FinalSprite
+  - FirstSprite
   layers:
   - Default
   - TransparentFX
