@@ -10,11 +10,14 @@ public class MoveShipSprite : MonoBehaviour
     [SerializeField] bool isMainSprite;
 
     RectTransform target;
+    
+    
     void Awake()
     {
         target = GetComponent<RectTransform>();
     }
 
+   
     public void Move(Vector2 finalPos, Vector2 finalSize, int direction)
     {
         StartCoroutine(IEMoveSpriteUI(finalPos, finalSize, direction));
