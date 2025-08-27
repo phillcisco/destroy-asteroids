@@ -4,24 +4,22 @@ using UnityEngine;
 
 public class MoveShipSprite : MonoBehaviour
 {
-    [SerializeField] RectTransform previous;
-    [SerializeField] RectTransform next;
-    
+   
     [SerializeField] bool isMainSprite;
 
-    RectTransform target;
-    
+    RectTransform rectTransform;
     
     void Awake()
     {
-        target = GetComponent<RectTransform>();
+        rectTransform = GetComponent<RectTransform>();
     }
 
-   
     public void Move(Vector2 finalPos, Vector2 finalSize, int direction)
     {
-        if (target.anchoredPosition.x > finalPos.x)
+        if ((rectTransform.anchoredPosition.x > finalPos.x && direction > 0) ||
+            (finalPos.x > rectTransform.anchoredPosition.x && direction < 0 ))
         {
+            print("Teleport");
             Teleport(finalPos, finalSize, direction);
         }
         else
@@ -32,26 +30,26 @@ public class MoveShipSprite : MonoBehaviour
 
     void Teleport(Vector2 finalPos, Vector2 finalSize, int direction)
     {
-            target.anchoredPosition = finalPos;
-            target.sizeDelta = finalSize;
+            rectTransform.anchoredPosition = finalPos;
+            rectTransform.sizeDelta = finalSize;
     }
     
     IEnumerator IEMoveSpriteUI(Vector2 finalPos, Vector2 finalSize, int direction)
     {
         
         float deslocamento = 0;
-        float totalduration = 1f;
+        float totalduration = 0.5f;
         
-        Vector2 initialPos = target.anchoredPosition;
-        Vector2 initialSize = target.sizeDelta;
-        while (Mathf.Abs(finalPos.x - target.anchoredPosition.x)  > 0.1f)
+        Vector2 initialPos = rectTransform.anchoredPosition;
+        Vector2 initialSize = rectTransform.sizeDelta;
+        while (Mathf.Abs(finalPos.x - rectTransform.anchoredPosition.x)  > 0.1f)
         { 
-            target.anchoredPosition = Vector3.Lerp(initialPos,finalPos,deslocamento/totalduration);
-            target.sizeDelta = Vector3.Lerp(initialSize, finalSize, deslocamento/totalduration);
+            rectTransform.anchoredPosition = Vector3.Lerp(initialPos,finalPos,deslocamento/totalduration);
+            rectTransform.sizeDelta = Vector3.Lerp(initialSize, finalSize, deslocamento/totalduration);
             deslocamento += Time.deltaTime;
             yield return null;
         }
-        target.anchoredPosition = finalPos;
-        target.sizeDelta = finalSize;
+        rectTransform.anchoredPosition = finalPos;
+        rectTransform.sizeDelta = finalSize;
     }
 }

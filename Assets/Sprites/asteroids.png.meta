@@ -446,7 +446,18 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
+      asteroids_0: -5766033097715662417
+      asteroids_1: 3577993227607710454
+      asteroids_10: 6360722591433423952
       asteroids_11: 899509264
+      asteroids_2: -5855003014915806325
+      asteroids_3: 147200075954907950
+      asteroids_4: 2686463653476831965
+      asteroids_5: -1465151005206068119
+      asteroids_6: -5949255221807805938
+      asteroids_7: -39755869691097218
+      asteroids_8: -6532366514859937553
+      asteroids_9: -8948216163402802190
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
