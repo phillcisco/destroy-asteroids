@@ -20,7 +20,20 @@ public class MoveShipSprite : MonoBehaviour
    
     public void Move(Vector2 finalPos, Vector2 finalSize, int direction)
     {
-        StartCoroutine(IEMoveSpriteUI(finalPos, finalSize, direction));
+        if (target.anchoredPosition.x > finalPos.x)
+        {
+            Teleport(finalPos, finalSize, direction);
+        }
+        else
+        {
+            StartCoroutine(IEMoveSpriteUI(finalPos, finalSize, direction));
+        }
+    }
+
+    void Teleport(Vector2 finalPos, Vector2 finalSize, int direction)
+    {
+            target.anchoredPosition = finalPos;
+            target.sizeDelta = finalSize;
     }
     
     IEnumerator IEMoveSpriteUI(Vector2 finalPos, Vector2 finalSize, int direction)

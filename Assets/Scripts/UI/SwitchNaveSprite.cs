@@ -39,7 +39,7 @@ public class SwitchNaveSprite : MonoBehaviour
     Animator _animatorController;
     bool _isMoving;
     bool isUserSelectingShip;
-    int index;
+    int index = 1;
     int totalNumSprites;
     //Center sprite
     int selectedSpriteIndex = 2;
@@ -54,7 +54,14 @@ public class SwitchNaveSprite : MonoBehaviour
         
         _animatorController = GetComponent<Animator>();
         currentSpritesPositions = new List<Vector2>();
-        naveSpritesContainer.ForEach(n => currentSpritesPositions.Add(n.rectTransform.anchoredPosition));
+
+        for (int i = 0; i < naveSpritesContainer.Count; i++)
+        {
+            currentSpritesPositions.Add(naveSpritesContainer[i].rectTransform.anchoredPosition);
+            print(currentSpritesPositions[i]);
+        }
+
+        //naveSpritesContainer.ForEach(n => print(n.rectTransform.anchoredPosition.x));
     }
 
     void OnEnable()
@@ -82,22 +89,29 @@ public class SwitchNaveSprite : MonoBehaviour
             
             for (int i = 0; i < naveSpritesContainer.Count; i++)
             {
-                print(i);
-                print(naveSpritesContainer.Count);
-                Vector2 finalPos;
 
-                if (Mod(i + 1, totalNumSprites) == 0)
-                    finalPos = currentSpritesPositions[0];
-                else
-                    finalPos = currentSpritesPositions[Mod(i + 1,totalNumSprites)];
-              
+                Vector2 finalPos;
+                    
+                // if (Mod(i + index, totalNumSprites) == 0)
+                //     finalPos = currentSpritesPositions[0];
+                finalPos = currentSpritesPositions[Mod(i + index,totalNumSprites)];
+  
+                    print(Mod(i + index,totalNumSprites));
+                    //print(finalPos);
+           
                 Vector2 finalSize = finalPos.x == 0 ? centerSpriteSize : sideSpriteSize;
                 naveSpritesContainer[i].GetComponent<MoveShipSprite>().Move(finalPos,finalSize,1);
-                currentSpritesPositions[i] = finalPos;
+    
             }
+            index = Mod(index+1, totalNumSprites);
             
+            // Vector2 tempPos = currentSpritesPositions[currentSpritesPositions.Count-1];
+            // for (int i = currentSpritesPositions.Count-1; i > 0; i--)
+            // {
+            //     currentSpritesPositions[i] = currentSpritesPositions[i-1];
+            // }
+            // currentSpritesPositions[0] = tempPos;
 
-            
             //StartCoroutine(IEMoveSpriteUI(naveSpritesContainer[2].rectTransform, rightSpritePos, sideSpriteSize, 1));
             // chosenSprite.gameObject.SetActive(false);
             // _animatorController.Play("NaveSwitchLeft");
