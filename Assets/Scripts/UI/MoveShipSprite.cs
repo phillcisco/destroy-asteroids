@@ -19,7 +19,6 @@ public class MoveShipSprite : MonoBehaviour
         if ((rectTransform.anchoredPosition.x > finalPos.x && direction > 0) ||
             (finalPos.x > rectTransform.anchoredPosition.x && direction < 0 ))
         {
-            print("Teleport");
             Teleport(finalPos, finalSize, direction);
         }
         else

@@ -28,16 +28,13 @@ public class SwitchNaveSprite : MonoBehaviour
 
     [Header("Sprites")] 
     [SerializeField] List<Image> naveSpritesContainer;
-
-    List<Vector2> currentSpritesPositions;
-    
-    [Header("Sprites")] 
-    [SerializeField] List<RectTransform> spritesPosition;
+    List<Vector2> _currentSpritesPositions;
+    [SerializeField] ResourceLoader loader;
     
     Animator _animatorController;
     bool _isMoving;
     bool isUserSelectingShip;
-    int index = 1;
+    int index;
     int totalNumSprites;
     //Center sprite
     int selectedSpriteIndex = 2;
@@ -51,14 +48,43 @@ public class SwitchNaveSprite : MonoBehaviour
         sideSpriteSize = leftSprite.rectTransform.sizeDelta;
         
         _animatorController = GetComponent<Animator>();
-        currentSpritesPositions = new List<Vector2>();
+        _currentSpritesPositions = new List<Vector2>();
 
         for (int i = 0; i < naveSpritesContainer.Count; i++)
         {
-            currentSpritesPositions.Add(naveSpritesContainer[i].rectTransform.anchoredPosition);
+            _currentSpritesPositions.Add(naveSpritesContainer[i].rectTransform.anchoredPosition);
+        }
+    }
+
+    private void Start()
+    {
+        var ret = loader.GetResources("Nave", typeof(Texture2D));
+
+        int spriteSCounter = 0;
+        for (int i = 0; i < ret.Length; i++)
+        {
+            
+            try
+            {
+                
+                print(i);
+                Texture2D t = (Texture2D)ret[i];
+                Sprite sprite = Sprite.Create(t, new Rect(0.0f, 0.0f, t.width, t.height), 
+                                                               new Vector2(0.5f, 0.5f), 
+                                                               100.0f);
+                sprite.name = t.name;
+                naveSpritesContainer[spriteSCounter].sprite = sprite;
+   
+                spriteSCounter++;
+                // if (spriteSCounter == 2)
+                //     break;
+            }
+            catch (Exception e)
+            {
+                print(e.Message);
+            }
         }
 
-        //naveSpritesContainer.ForEach(n => print(n.rectTransform.anchoredPosition.x));
     }
 
     void OnEnable()
@@ -74,16 +100,16 @@ public class SwitchNaveSprite : MonoBehaviour
 
     void OnSwitch(InputValue inputValue)
     {
-
         if (_isMoving) return;
         if (isUserSelectingShip && inputValue.Get<Vector2>().x != 0)
         {
+            print("apertou");
             int dir = Math.Sign(inputValue.Get<Vector2>().x) ;
             _isMoving = true;
             StartCoroutine(IEMoving());
             for (int i = 0; i < naveSpritesContainer.Count; i++)
             {
-                Vector2 finalPos = currentSpritesPositions[Mod(i + (index+dir),totalNumSprites)];
+                Vector2 finalPos = _currentSpritesPositions[Mod(i + (index+dir),totalNumSprites)];
                 Vector2 finalSize = finalPos.x == 0 ? centerSpriteSize : sideSpriteSize;
                 naveSpritesContainer[i].GetComponent<MoveShipSprite>().Move(finalPos,finalSize,dir);
             }
