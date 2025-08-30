@@ -14,5 +14,8 @@ namespace Utils
         
         //Shader Properties
         public const string SH_COLOR = "_Color";
+        
+        //PlayerPrefs
+        public const string PP_NAVE_SPRITE = "Nave_Sprite";
     }
 }

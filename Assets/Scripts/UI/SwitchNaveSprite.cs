@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Utils;
 
 public class SwitchNaveSprite : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class SwitchNaveSprite : MonoBehaviour
     [SerializeField] EventSystem eventSystem;
     [SerializeField] RectTransform centerSprite;
     [SerializeField] RectTransform sideSprite;
-
+    [SerializeField] Button btnConfirmarNave;
+    [SerializeField] Button btnVoltar;
     
     Vector2 centerSpriteSize, sideSpriteSize;
 
@@ -25,16 +27,13 @@ public class SwitchNaveSprite : MonoBehaviour
 
     bool _isMoving;
     bool isUserSelectingShip;
+    
     int indexNextPos;
     int totalNumVisibleSprites;
     int totalLoadedSprites;
-    int firstVisibleSpriteIndex;
-    int lastVisibleSpriteIndex;
+    int firstUISpriteIndex;
+    int lastUISpriteIndex;
     
-    //Center sprite
-    int selectedSpriteIndex = 2;
-    
-
     void Awake()
     {
     
@@ -47,9 +46,8 @@ public class SwitchNaveSprite : MonoBehaviour
         {
             _currentSpritesPositions.Add(naveSpritesContainer[i].rectTransform.anchoredPosition);
         }
-
-        firstVisibleSpriteIndex = 0;
-        lastVisibleSpriteIndex = totalNumVisibleSprites-1;
+        firstUISpriteIndex = 0;
+        lastUISpriteIndex = totalNumVisibleSprites-1;
     }
 
     void Start()
@@ -82,6 +80,8 @@ public class SwitchNaveSprite : MonoBehaviour
     {
         isUserSelectingShip = true;
         totalNumVisibleSprites = naveSpritesContainer.Count;
+        btnVoltar.enabled = false;
+        btnConfirmarNave.enabled = false;
     }
     void OnDisable()
     {
@@ -89,8 +89,7 @@ public class SwitchNaveSprite : MonoBehaviour
     }
     void OnSwitch(InputValue inputValue)
     {
-        if (_isMoving) return;
-        if (isUserSelectingShip && inputValue.Get<Vector2>().x != 0)
+        if (!_isMoving && isUserSelectingShip && inputValue.Get<Vector2>().x != 0)
         {
             int dir = Math.Sign(inputValue.Get<Vector2>().x) ;
             _isMoving = true;
@@ -101,8 +100,8 @@ public class SwitchNaveSprite : MonoBehaviour
                 Vector2 finalSize = finalPos.x == 0 ? centerSpriteSize : sideSpriteSize;
                 naveSpritesContainer[i].GetComponent<MoveShipSprite>().Move(finalPos,finalSize,dir);
             }
-            firstVisibleSpriteIndex = Mod(firstVisibleSpriteIndex - dir, totalNumVisibleSprites);
-            lastVisibleSpriteIndex = Mod(firstVisibleSpriteIndex + totalNumVisibleSprites-1, totalNumVisibleSprites);
+            firstUISpriteIndex = Mod(firstUISpriteIndex - dir, totalNumVisibleSprites);
+            lastUISpriteIndex = Mod(firstUISpriteIndex + totalNumVisibleSprites-1, totalNumVisibleSprites);
             
             //Tornando o índice circular
             indexNextPos = Mod(indexNextPos+dir, totalNumVisibleSprites);
@@ -110,20 +109,44 @@ public class SwitchNaveSprite : MonoBehaviour
             int indexToChangeSprite;
             if (dir > 0)
             {
-                int currentFirstVisibleSprite = int.Parse(naveSpritesContainer[Mod(firstVisibleSpriteIndex+1,totalNumVisibleSprites)].sprite.name);
-                indexToChangeSprite = firstVisibleSpriteIndex;
+                int currentFirstVisibleSprite = int.Parse(naveSpritesContainer[Mod(firstUISpriteIndex+1,totalNumVisibleSprites)].sprite.name);
+                indexToChangeSprite = firstUISpriteIndex;
                 newSpriteIndex = Mod(currentFirstVisibleSprite - 2, totalLoadedSprites);  
             }
             else
             {
-                int currentFirstVisibleSprite = int.Parse(naveSpritesContainer[Mod(lastVisibleSpriteIndex-1,totalNumVisibleSprites)].sprite.name);
-                indexToChangeSprite = lastVisibleSpriteIndex;
+                int currentFirstVisibleSprite = int.Parse(naveSpritesContainer[Mod(lastUISpriteIndex-1,totalNumVisibleSprites)].sprite.name);
+                indexToChangeSprite = lastUISpriteIndex;
                 newSpriteIndex = Mod(currentFirstVisibleSprite, totalLoadedSprites);    
             }
             naveSpritesContainer[indexToChangeSprite].sprite = _loadedNaveSprites[newSpriteIndex];
-          
+        }
+        else if (inputValue.Get<Vector2>().y != 0)
+        {
+            isUserSelectingShip = false;
+            float dir = inputValue.Get<Vector2>().y;
+            if (dir < 0)
+            {
+                btnVoltar.enabled = true;
+                btnConfirmarNave.enabled = true;
+                eventSystem.SetSelectedGameObject(btnConfirmarNave.gameObject);
+            }
+            else
+            {
+                isUserSelectingShip = true;
+                btnVoltar.enabled = false;
+                btnConfirmarNave.enabled = false;
+            }
         }
     }
+
+    public void PersistShipSprite()
+    {
+        int selectedSpriteIndex = Mod(firstUISpriteIndex + 2,totalNumVisibleSprites);
+        int selectSpriteID = int.Parse(naveSpritesContainer[selectedSpriteIndex].sprite.name);
+        PlayerPrefs.SetInt(Constants.PP_NAVE_SPRITE,selectSpriteID);
+    }
+    
     IEnumerator IEMoving()
     {
         yield return new WaitForSeconds(0.5f);

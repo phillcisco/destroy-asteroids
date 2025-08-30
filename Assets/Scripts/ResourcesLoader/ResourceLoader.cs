@@ -11,12 +11,12 @@ public class ResourceLoader : MonoBehaviour
         Instance = this;
     }
 
-    public Object GetResource(string resource) 
+    public Object GetResource(string resource, Type t) 
     {
+        print(resource);
         //Utilizando Resources Loader
-        var asset = Resources.Load(resource);
+        var asset = Resources.Load(resource, t);
         if(asset) return asset;
-        print($"não achou asset");
         //Nao foi encontrado o asset
         return null;
     }

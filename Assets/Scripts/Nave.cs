@@ -8,7 +8,6 @@ public class Nave : MonoBehaviour
    
     
     [SerializeField] float speed;
-    [SerializeField] Sprite[] sprites;
     
     Camera _mainCamera;
     Rigidbody2D _rb;
@@ -42,10 +41,17 @@ public class Nave : MonoBehaviour
         
         //Iniciando com Arma Padrão
         arma = Instantiate(arma,transform);
-        
+        print(PlayerPrefs.GetInt(Constants.PP_NAVE_SPRITE, 1));
         //Buscando o Sprite
-        _spritePos = PlayerPrefs.GetInt("SPRITE_NAVE", 0);
-        SetSprite(_spritePos);
+        //ResourceLoader.Instance.GetResource($"Nave/{PlayerPrefs.GetInt(Constants.PP_NAVE_SPRITE, 1)}",typeof(Texture2D));
+        
+        Texture2D  texture2D = (Texture2D)ResourceLoader.Instance.GetResource($"Nave/{PlayerPrefs.GetInt(Constants.PP_NAVE_SPRITE, 1)}",typeof(Texture2D));    
+        Sprite sprite = Sprite.Create(texture2D, new Rect(0.0f, 0.0f, texture2D.width, texture2D.height), 
+            new Vector2(0.5f, 0.5f), 
+            100.0f);
+        
+        
+        SetSprite(sprite);
 
     }
     
@@ -54,10 +60,9 @@ public class Nave : MonoBehaviour
         FindAnyObjectByType<UIController>().OnInputDeviceChanged += UpdateInputMovementType;
     }
 
-    void SetSprite(int spriteIndex)
+    void SetSprite(Sprite sprite)
     {
-        _spriteRenderer.sprite = sprites[spriteIndex];
-        print(sprites[spriteIndex].name);
+        _spriteRenderer.sprite = sprite;
     }
     
     public void ReadShootInput(InputAction.CallbackContext ctx)
