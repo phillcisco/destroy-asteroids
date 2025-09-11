@@ -225,12 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 8
-  sprites:
-  - {fileID: 21300000, guid: 7dd7ffd5ae95a0a46a251c85e71b1e64, type: 3}
-  - {fileID: 21300000, guid: 3b37eb24bcb728347b6bf758c76e6736, type: 3}
-  - {fileID: 21300000, guid: 095d9e493f9d1d64f84a9c653a10c1dd, type: 3}
-  - {fileID: 21300000, guid: 8d20ce08152e00d43a92d0205a38ccf4, type: 3}
-  arma: {fileID: 5799236327639137754, guid: f9345edadf504064c802c20b01811124, type: 3}
+  armaPadrao: {fileID: 5799236327639137754, guid: f9345edadf504064c802c20b01811124, type: 3}
 --- !u!114 &2021371984556417367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,7 +411,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 05d8b533ac8e6ca459069bbc8eaeee70, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

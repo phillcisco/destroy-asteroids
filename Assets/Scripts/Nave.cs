@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Utils;
@@ -11,14 +12,18 @@ public class Nave : MonoBehaviour
     
     Camera _mainCamera;
     Rigidbody2D _rb;
-    SpriteRenderer _spriteRenderer;
-    
+    SpriteRenderer _spriteRenderer; 
+    Material _naveMat;
     float _yDir;
     float _xPosition;
     float _minY, _maxY;
+    float _intensity, _intensityDir, _intensityRate = 15;
+    bool _hasPowerUp;
     
-    [SerializeField] Arma arma;
-
+    
+    Arma arma;
+    [SerializeField] Arma armaPadrao;
+    
     bool _isShooting;
     int _spritePos;
 
@@ -32,7 +37,7 @@ public class Nave : MonoBehaviour
         _xPosition = transform.position.x;
 
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        
+        _naveMat = _spriteRenderer.material;
         _mainCamera = Camera.main;
         _minY = Camera.main.ViewportToWorldPoint(new Vector2(0,0.15f)).y;
         _maxY = Camera.main.ViewportToWorldPoint(new Vector2(0,0.85f)).y;
@@ -40,7 +45,7 @@ public class Nave : MonoBehaviour
         InputMovementDevice = (InputDeviceEnum) PlayerPrefs.GetInt(Constants.INPUT_DEVICE,Constants.MOUSE);
         
         //Iniciando com Arma Padrão
-        arma = Instantiate(arma,transform);
+        arma = Instantiate(armaPadrao,transform);
         print(PlayerPrefs.GetInt(Constants.PP_NAVE_SPRITE, 1));
         //Buscando o Sprite
         //ResourceLoader.Instance.GetResource($"Nave/{PlayerPrefs.GetInt(Constants.PP_NAVE_SPRITE, 1)}",typeof(Texture2D));
@@ -49,7 +54,6 @@ public class Nave : MonoBehaviour
         Sprite sprite = Sprite.Create(texture2D, new Rect(0.0f, 0.0f, texture2D.width, texture2D.height), 
             new Vector2(0.5f, 0.5f), 
             100.0f);
-        
         
         SetSprite(sprite);
 
@@ -109,6 +113,8 @@ public class Nave : MonoBehaviour
         {
             Atirar();
         }
+        if(_hasPowerUp)
+            BlinkSpaceShipVFX();
     }
 
     void MoveShip()
@@ -140,6 +146,30 @@ public class Nave : MonoBehaviour
     {
         Destroy(this.arma.gameObject);
         this.arma = Instantiate(arma,transform);
+        ApplyPowerUp();
+    }
+    
+    void BlinkSpaceShipVFX()
+    {
+        _intensity += _intensityRate * Time.deltaTime * _intensityDir;
+        _naveMat.color = new Color(_intensity,_intensity,_intensity);
+        if (_intensity >= 3) _intensityDir = -1;
+        if (_intensity <= 1) _intensityDir = 1;
+    }
+
+    void ApplyPowerUp()
+    {
+        _hasPowerUp = true;
+        StartCoroutine(IEApplyPowerup());
+    }
+
+    IEnumerator IEApplyPowerup()
+    {
+        yield return new WaitForSeconds(3);
+        _hasPowerUp = false;
+        Destroy(this.arma.gameObject);
+        arma = Instantiate(armaPadrao,transform);
+        _naveMat.color = new Color(1,1,1);
     }
 }
 
